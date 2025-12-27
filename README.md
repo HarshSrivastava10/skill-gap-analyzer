@@ -24,4 +24,23 @@ streamlit run app.py
 - Hierarchical skill inference
 - TF‑IDF + embedding hybrid extractor
 
+![APP SCREENSHOT](screenshots/ui_home.png)
+
+## Run Locally
+```bash
+git clone <repo-url>
+cd project-folder
+
+python -m venv venv
+venv\Scripts\activate # WINDOWS
+
+# or
+
+source venv/bin/activate # LINUX/MAC
+
+pip install --r requirements.txt
+streamlit run app.py
+
+```
+
 AUTHOR - HARSH SRIVASTAVA
