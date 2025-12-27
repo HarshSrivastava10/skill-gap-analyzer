@@ -24,4 +24,30 @@ streamlit run app.py
 - Hierarchical skill inference
 - TF‑IDF + embedding hybrid extractor
 
+![APP SCREENSHOT](screenshots/ui_home.png)
+
+## Run Locally
+```bash
+git clone https://github.com/HarshSrivastava10/skill-gap-analyzer.git
+cd project-folder
+
+python -m venv venv
+venv\Scripts\activate # WINDOWS
+
+# or
+
+source venv/bin/activate # LINUX/MAC
+
+pip install --r requirements.txt
+streamlit run app.py
+
+```
+
+### Future Enhancements
+- Role‑aware weighting
+- TF‑IDF + embedding hybrid model
+- Export results as PDF
+- Docker support for easy deployment
+
+
 AUTHOR - HARSH SRIVASTAVA

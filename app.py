@@ -59,6 +59,19 @@ def get_resources(skill, resources_df):
 
 SKILL_META = build_skill_meta(skills_df)
 
+def confidence_label(score):
+    if score>=0.80:
+        return "High"
+    if score >= 0.60:
+        return "Medium"
+    return "Low"
+
+def confidence_color(level):
+    return {
+      "High": "🟢",
+        "Medium": "🟡",
+        "Low": "🟠"
+    }[level]
 
 #LOADING MODEL SAFELLY
 
@@ -135,13 +148,15 @@ if analyze_btn:
 
 
     # Explain
-    enriching_missing_skills = enrich_skills_with_explanations(missing_skills)
+    missing_enriching_skills = enrich_skills_with_explanations(missing_skills)
 
     # Roadmap
+    prioritized = prioritize_skills(missing_skills, SKILL_META)
+
     roadmap = generate_roadmap(
-        prioritize_skills(missing_skills, SKILL_META),
-        lambda s: get_resources(s, resources_df)
-    )
+        prioritized,
+        lambda skill: get_resources(skill, resources_df)
+        )
 
 
     st.write("DEBUG — Resume Skills:", resume_skill_names)
@@ -152,33 +167,39 @@ if analyze_btn:
     # DISPLAY
     st.subheader("✅ Skills You Have")
     for skills in resume_skills:
-        st.markdown(f"- {skills['skill']}")
+        level = confidence_label(skills['score'])
+        icon = confidence_color(level)
+        st.markdown(
+            f"- **{skills['skill']} ** - {icon} * {level} confidence"
+        )
+        
 
     st.subheader("❌ Skills You Need")
 
-    if not enriching_missing_skills:
+    if not missing_enriching_skills:
         st.markdown("Already acquired the skills requiured for this job...")
 
     else:
-        for item in enriching_missing_skills:
+        for s in missing_enriching_skills:
+            level = confidence_label(s["score"])
+            icon = confidence_color(level)
 
-            resources = get_resources(item['skill'], resources_df)
+            st.markdown(f"""
+            **{s['skill'].title()}**
 
-            st.markdown(
-                f"""
-                **{item['skill'].title()}**  
-                Confidence: `{item['confidence']}`  
-                {item['explanation']}
-                """
-            )
+            Confidence: {icon} *{level}*  
+            _reason_: This skill is required in the Job Description but not found in your resume.
 
-            if resources:
-                st.markdown("📚 **Resources:**")
-                for r in resources:
-                    st.markdown(f"- {r}")
-
-    st.subheader("🗺️ Learning Roadmap")
-
+            **Evidence from JD:**  
+            > {s.get('evidence', 'N/A')}
+            """)
     
+    st.subheader("Learning Roadmap")
     for step in roadmap:
-        st.markdown(f"- {step}")
+        st.markdown(f"**{step['title']}**")
+        if step.get("depends_on"):
+            st.markdown(f"↳ *Prerequisites:* {', '.join(step['depends_on'])}")
+
+        if step.get("resources"):
+            for r in step["resources"]:
+                st.markdown(f"• {r}")
