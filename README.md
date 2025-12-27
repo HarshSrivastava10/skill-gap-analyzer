@@ -28,7 +28,7 @@ streamlit run app.py
 
 ## Run Locally
 ```bash
-git clone <repo-url>
+git clone https://github.com/HarshSrivastava10/skill-gap-analyzer.git
 cd project-folder
 
 python -m venv venv
@@ -42,5 +42,12 @@ pip install --r requirements.txt
 streamlit run app.py
 
 ```
+
+### Future Enhancements
+- Role‑aware weighting
+- TF‑IDF + embedding hybrid model
+- Export results as PDF
+- Docker support for easy deployment
+
 
 AUTHOR - HARSH SRIVASTAVA
