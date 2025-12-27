@@ -1,0 +1,12 @@
+Job Title: Machine Learning Engineer
+
+Required Skills:
+Python
+Machine Learning
+Deep Learning
+TensorFlow
+Model Deployment
+Pipelines
+Feature Engineering
+Scikit‑Learn
+SQL

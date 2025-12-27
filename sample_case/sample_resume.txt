@@ -1,0 +1,20 @@
+Sara Khan
+Email: sarakhan@email.com
+
+SUMMARY
+Machine Learning Engineer with hands‑on experience building ML pipelines,
+training models, and deploying predictive systems.
+
+SKILLS
+Python, Scikit‑Learn, TensorFlow, Machine Learning, NumPy, Pandas,
+Feature Engineering, Model Evaluation, Git, SQL
+
+PROJECTS
+Fraud Detection System — Implemented classification pipeline with feature engineering.
+Model Deployment — Built REST API for inference using FastAPI.
+
+EXPERIENCE
+ML Engineer — Tech Labs (2 years)
+
+EDUCATION
+B.E. Computer Engineering — 2022
