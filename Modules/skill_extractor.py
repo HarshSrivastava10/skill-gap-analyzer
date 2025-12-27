@@ -5,7 +5,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 import re
 import numpy as np
 
-
+# THIS IS A dict FOR ALIASES
 SKILL_ALIASES = {
     "scikit-learn": "scikitlearn",
     "scikitlearn advanced": "scikitlearn",
@@ -35,6 +35,7 @@ SKILL_ALIASES = {
     "statistical analysis": "statistics"
 }
 
+# THIS IS A set FOR NOISE/IRRELEVANT WORDS
 NOISE_TERMS = {
     "bangalore", "bengaluru", "india",
     "remote", "onsite", "hybrid",
@@ -45,8 +46,11 @@ NOISE_TERMS = {
     "projects",
 }
 
+# THIS IS A set CONTAINING EXTRA_WORDS
 STOPWORDS = {"and", "with", "in", "of", "for", "to", "on"}
 
+
+# FUNCTION TO MAKE THE WORDS INTO TOKENS, REMOVING STOPWORDS
 def tokenize(text):
     return {
         w for w in re.findall(r"[a-zA-Z0-9\+\-]+", text.lower())
@@ -231,22 +235,36 @@ def candidate_skills(text, skills):
             candidates.append(s)
     return candidates
 
+# Keyword Fallback 
+def keyword_match_skills(text, skill_set):
+    text_norm = normalize_phrase(text)
 
+    matched = []
+    for skill in skill_set:
+        s_norm = normalize_phrase(skill)
+
+        if s_norm in text_norm:
+            matched.append({
+                "skill": skill,
+                "score": 0.65, # medium confidence baseline
+                "evidence": skill
+            })
+    return matched
+
+
+# Hybrid Extractor
 def extract_skills(t, skill_set, m, k = 8, r_cut=0.75):
 
-    # normalizing
-    skills_set = ({canonicalize(s) for s in skill_set})
-
-    # NEW RESTRICT TO REALISTIC CANDIDATES
-    candidates = candidate_skills(t, skills_set)
-
-    print("Ontology size =", len(skill_set))
-    print("Candidates after filter =", len(candidates))
+    # normalizing + canonicalize onthology
+    skill_list = sorted({canonicalize(s) for s in skill_set})
+    # CANDIDATES filtering
+    candidates = candidate_skills(t, skill_list)
 
 
     if not candidates:
         return []
     
+    # semantic similarity layer
     raw = extract_skills_sentence_level(
         text=t,
         skills=candidates,
@@ -255,8 +273,14 @@ def extract_skills(t, skill_set, m, k = 8, r_cut=0.75):
         relative_cutoff=r_cut
     )
 
+    # keyword fallback layer
+    keyword_hits = keyword_match_skills(t, skill_list)
+
+    # merge by skill name
+    combined = {s["skill"]: s for s in (raw + keyword_hits)}.values()
+
     mapped = []
-    for s in raw:
+    for s in combined:
         canon = map_to_ontology(s["skill"], skill_set)
 
         if canon:
