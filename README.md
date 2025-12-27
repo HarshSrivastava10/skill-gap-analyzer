@@ -24,4 +24,4 @@ streamlit run app.py
 - Hierarchical skill inference
 - TF‑IDF + embedding hybrid extractor
 
-#AUTHOR - HARSH SRIVASTAVA (Student)
+AUTHOR - HARSH SRIVASTAVA
