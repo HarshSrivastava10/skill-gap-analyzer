@@ -23,3 +23,5 @@ streamlit run app.py
 - Role‑aware skill weighting
 - Hierarchical skill inference
 - TF‑IDF + embedding hybrid extractor
+
+#AUTHOR - HARSH SRIVASTAVA
